@@ -3,10 +3,8 @@ package com.kempca.java8.sorting;
 import com.kempca.java8.model.Customer;
 import org.junit.jupiter.api.Test;
 
-import java.math.BigInteger;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
