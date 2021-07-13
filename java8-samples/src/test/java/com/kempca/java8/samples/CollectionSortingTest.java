@@ -1,4 +1,4 @@
-package com.kempca.java8.sorting;
+package com.kempca.java8.samples;
 
 import com.kempca.java8.model.Customer;
 import org.junit.jupiter.api.Test;
