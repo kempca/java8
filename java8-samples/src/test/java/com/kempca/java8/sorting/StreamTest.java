@@ -1,9 +1,12 @@
 package com.kempca.java8.sorting;
 
 import com.kempca.java8.model.Customer;
+import com.kempca.java8.model.Person;
 import org.junit.jupiter.api.Test;
 
 import java.util.*;
+import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -89,5 +92,75 @@ public class StreamTest {
                 .findFirst().orElse(null);
 
         assertNull(result);
+    }
+
+    @Test
+    void filterUsingNamedPredicate() {
+        Customer customer1 = new Customer("Bob");
+        Customer customer2 = new Customer("Bob");
+        Customer customer3 = new Customer("Tom");
+        List<Customer> customers = Arrays.asList(customer1, customer2, customer3);
+
+        List<Customer> customersNamedTom = customers.stream()
+                .filter(new CustomerFirstNamePredicate("Tom"))
+                .collect(Collectors.toList());
+
+        assertEquals(1, customersNamedTom.size());
+        assertEquals(customer3, customersNamedTom.get(0));
+    }
+
+    @Test
+    void mapUsingNamedFunction() {
+        Customer customer1 = new Customer("Bob");
+        Customer customer2 = new Customer("Tom");
+        List<Customer> customers = Arrays.asList(customer1, customer2);
+
+        List<Person> peopleNamedTom = customers.stream()
+                .filter(new CustomerFirstNamePredicate("Tom"))
+                .map(new CustomerToPersonFunction())
+                .collect(Collectors.toList());
+
+        assertEquals(1, peopleNamedTom.size());
+        assertEquals("Tom", peopleNamedTom.get(0).getFirstName());
+    }
+
+    @Test
+    void filterAndMapUsingLambdaFunctions() {
+        Customer customer1 = new Customer("Bob");
+        Customer customer2 = new Customer("Tom");
+        List<Customer> customers = Arrays.asList(customer1, customer2);
+
+        List<Person> peopleNamedTom = customers.stream()
+                .filter(customer -> customer.getFirstName().equals("Tom"))
+                .map(customer -> {
+                    return new Person(customer.getFirstName());
+                })
+                .collect(Collectors.toList());
+
+        assertEquals(1, peopleNamedTom.size());
+        assertEquals("Tom", peopleNamedTom.get(0).getFirstName());
+    }
+
+    private class CustomerFirstNamePredicate implements Predicate<Customer> {
+
+        private String firstName;
+
+        public CustomerFirstNamePredicate(String firstName) {
+            this.firstName = firstName;
+        }
+
+        @Override
+        public boolean test(Customer customer) {
+            return firstName.equals(customer.getFirstName());
+        }
+    }
+
+    private class CustomerToPersonFunction implements Function<Customer, Person> {
+
+        @Override
+        public Person apply(Customer customer) {
+            Person person = new Person(customer.getFirstName());
+            return person;
+        }
     }
 }
