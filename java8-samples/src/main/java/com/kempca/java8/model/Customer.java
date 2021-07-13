@@ -6,6 +6,11 @@ public class Customer {
     private String lastName;
     private Integer id;
     private Address address;
+    private Integer age;
+
+    public Customer(Integer age) {
+        this.age = age;
+    }
 
     public Customer(String firstName) {
         this.firstName = firstName;
@@ -48,12 +53,11 @@ public class Customer {
         this.address = address;
     }
 
-    @Override
-    public String toString() {
-        return "Customer{" +
-                "firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", id=" + id +
-                '}';
+    public Integer getAge() {
+        return age;
+    }
+
+    public void setAge(Integer age) {
+        this.age = age;
     }
 }
